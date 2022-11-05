@@ -17,28 +17,36 @@ rick_x = display_width // 3
 rick_y = display_height - rick_height - 40
 
 # Enemies variables
-bottle_width = 15
-bottle_height = 45
+deffender_width = 15
+deffender_height = 45
 
-bottle_x = display_width - 45
-bottle_y = display_height - bottle_height - 45
+deffender_x = display_width - 45
+deffender_y = display_height - deffender_height - 45
 
 
-bottle_img = [pygame.image.load("media/beer_bottle.png"), pygame.image.load("media/cola.png"), pygame.image.load("media/poo.png")]
-bottle_options = [32, 520, 32, 480, 12, 500]
+deffender_img = [pygame.image.load("media/beer_bottle.png"), pygame.image.load("media/cola.png"), pygame.image.load("media/poo.png")]
+deffender_options = [32, 520, 32, 480, 12, 500]
 clock = pygame.time.Clock()
 
 make_jump = False
 jump_counter = 30
 
 
-class Bottle:
-    def __init__(self, x, y, width, image, speed):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.image = image
+class Rogue:
+    def __init__(self, atack, defense, hitpoints, critchance, critpower, speed):
+        self.atack = atack
+        self.defense = defense
+        self.hitpoints = hitpoints
+        self.critchance = critchance
+        self.critpower = critpower
         self.speed = speed
+
+    def status(self):
+        print("A.Power " + self.atack)
+        print("Defence " + self.defense)
+        print("HP " + self.hitpoints)
+        print("C.Chance " + self.critchance)
+        print("C.Power " + self.critpower)
 
     def move(self):
         if self.x >= -self.width:
@@ -57,11 +65,76 @@ class Bottle:
         display.blit(self.image, (self.x, self.y))
 
 
+class Archer:
+    def __init__(self, atack, defense, hitpoints, critchance, critpower, speed):
+        self.atack = atack
+        self.defense = defense
+        self.hitpoints = hitpoints
+        self.critchance = critchance
+        self.critpower = critpower
+        self.speed = speed
+
+    def status(self):
+        print("A.Power " + self.atack)
+        print("Defence " + self.defense)
+        print("HP " + self.hitpoints)
+        print("C.Chance " + self.critchance)
+        print("C.Power " + self.critpower)
+
+    def move(self):
+        if self.x >= -self.width:
+            display.blit(self.image, (self.x, self.y))
+            # pygame.draw.rect(display, (0, 204, 0), (self.x, self.y, self.width, self.height))
+            self.x -= self.speed
+            return True
+        else:
+            return False
+
+    def return_self(self, radius, y, width, image):
+        self.x = radius
+        self.y = y
+        self.width = width
+        self.image = image
+        display.blit(self.image, (self.x, self.y))
+
+
+class Defender:
+    def __init__(self, atack, defense, hitpoints, critchance, critpower, speed):
+        self.atack = atack
+        self.defense = defense
+        self.hitpoints = hitpoints
+        self.critchance = critchance
+        self.critpower = critpower
+        self.speed = speed
+
+    def status(self):
+        print("A.Power " + self.atack)
+        print("Defence " + self.defense)
+        print("HP " + self.hitpoints)
+        print("C.Chance " + self.critchance)
+        print("C.Power " + self.critpower)
+
+    def move(self):
+        if self.x >= -self.width:
+            display.blit(self.image, (self.x, self.y))
+            # pygame.draw.rect(display, (0, 204, 0), (self.x, self.y, self.width, self.height))
+            self.x -= self.speed
+            return True
+        else:
+            return False
+
+    def return_self(self, radius, y, width, image):
+        self.x = radius
+        self.y = y
+        self.width = width
+        self.image = image
+        display.blit(self.image, (self.x, self.y))
+
 def run_game():
     global make_jump
     game = True
-    bottle_arr = []
-    create_bottle(bottle_arr)
+    deffender_arr = []
+    create_deffender(deffender_arr)
     land = pygame.image.load("media/background.png")
 
     while game:
@@ -78,7 +151,7 @@ def run_game():
             jump()
 
         display.blit(land, (0, 0))
-        draw_bottle(bottle_arr)
+        draw_deffender(deffender_arr)
 
         pygame.draw.rect(display, (153, 0, 75), (rick_x, rick_y, rick_width, rick_height))
         pygame.display.update()
@@ -95,24 +168,24 @@ def jump():
         make_jump = False
 
 
-def create_bottle(array):  # vars: x, y, width, height, speed
+def create_deffender(array):  # vars: x, y, width, height, speed
     choice = random.randrange(0, 3)
-    img = bottle_img[choice]
-    width = bottle_options[choice * 2]
-    height = bottle_options[choice * 2 + 1]
-    array.append(Bottle(display_width + 20, height, width, img, 4))
+    img = deffender_img[choice]
+    width = deffender_options[choice * 2]
+    height = deffender_options[choice * 2 + 1]
+    array.append(Defender(display_width + 20, height, width, img, 4))
 
     choice = random.randrange(0, 3)
-    img = bottle_img[choice]
-    width = bottle_options[choice * 2]
-    height = bottle_options[choice * 2 + 1]
-    array.append(Bottle(display_width + 300, height, width, img, 4))
+    img = deffender_img[choice]
+    width = deffender_options[choice * 2]
+    height = deffender_options[choice * 2 + 1]
+    array.append(Defender(display_width + 300, height, width, img, 4))
 
     choice = random.randrange(0, 3)
-    img = bottle_img[choice]
-    width = bottle_options[choice * 2]
-    height = bottle_options[choice * 2 + 1]
-    array.append(Bottle(display_width + 600, height, width, img, 4))
+    img = deffender_img[choice]
+    width = deffender_options[choice * 2]
+    height = deffender_options[choice * 2 + 1]
+    array.append(Defender(display_width + 600, height, width, img, 4))
 
 
 def find_radius(array):
@@ -133,17 +206,17 @@ def find_radius(array):
     return radius
 
 
-def draw_bottle(array):
-    for bottle in array:
-        check = bottle.move()
+def draw_defender(array):
+    for deffender in array:
+        check = deffender.move()
         if not check:
             radius = find_radius(array)
             choice = random.randrange(0, 3)
-            img = bottle_img[choice]
-            width = bottle_options[choice * 2]
-            height = bottle_options[choice * 2 + 1]
+            img = deffender_img[choice]
+            width = deffender_options[choice * 2]
+            height = deffender_options[choice * 2 + 1]
 
-            bottle.return_self(radius, height, width, img)
+            deffender.return_self(radius, height, width, img)
 
 
 run_game()
